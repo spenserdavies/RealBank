@@ -38,7 +38,7 @@
                 </label>
               </div>
               
-              <input type="checkbox" v-model="useExFunds" class="mr-2" />Open Using Existing Funds?
+              <input type="checkbox" v-model="useExFunds" class="mr-2" @click="newAccount.balance = 0"/>Open Using Existing Funds?
               <div v-if="useExFunds" class="mt-2">
                 <p><u>Select An Account To Withdraw From:</u></p>
                 <select class="custom-select" v-model="dropdownChoice">
