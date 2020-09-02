@@ -1,10 +1,36 @@
 <template>
   <div class="accounts container">
     <div class="row mt-5">
-      <div class="col-9 mx-auto card bg-light">
+      <div class="col-9 mx-auto card bg-light pt-4">
         <h2 class="text-center">Accounts</h2>
-        <button type="button" class="btn btn-success mx-auto my-2" data-toggle="modal" data-target="#newAccount">New Account</button>
+        <button type="button" class="btn btn-success mx-auto my-2" data-toggle="modal" data-target="#newAccount" @click="newAccount.accountNumber = null">New Account</button>
+        <hr>
+        <div class="row border-bottom pb-3 pt-2">
+          <div class="col-4 text-center">
+            <h5>Type</h5>
+          </div>
+          <div class="col-5 col-md-4 text-center">
+            <h5>Account #</h5>
+          </div>
+          <div class="col-3 col-md-4 text-center">
+            <h5>Bal.</h5>
+          </div>
+        </div>
+        <div class="pb-5">
 
+        <div class="row border-bottom" v-for="account in accounts" :key="account.accountNumber">
+          <div class="col-4  pt-3 text-center border-right">
+            <p>{{account.type}}</p>
+          </div>
+          <div class="col-5 col-md-4 pt-3 text-center border-right">
+            <p>{{account.accountNumber}}</p>
+          </div>
+          <div class="col-3 col-md-4 pt-3 text-center">
+            <p>{{account.balance}}</p>
+          </div>
+        </div>
+
+        </div>
         
       </div>
     </div>
@@ -38,11 +64,11 @@
                 </label>
               </div>
               
-              <input type="checkbox" v-model="useExFunds" class="mr-2" @click="newAccount.balance = 0"/>Open Using Existing Funds?
+              <input type="checkbox" v-model="useExFunds" class="mr-2" @click="newAccount.balance = 0; dropdownCoice = null"/>Open Using Existing Funds?
               <div v-if="useExFunds" class="mt-2">
                 <p><u>Select An Account To Withdraw From:</u></p>
                 <select class="custom-select" v-model="dropdownChoice">
-                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.type}}: {{account.accountNumber}}</option>
+                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.type}} #{{account.accountNumber}} :<br> ${{account.balance}}</option>
                 </select>
                 <button type="button" class="btn btn-success my-2 float-right" @click="fundsInput=true">Select</button>
                 
@@ -55,10 +81,10 @@
               </div>
             </form>
           </div>
-          {{newAccount}}
+          
           <div class="modal-footer">
             <button type="button" class="btn btn-dark" data-dismiss="modal" @click="resetModal">Close</button>
-            <button type="button" class="btn btn-success">Open Account</button>
+            <button type="button" class="btn btn-success"  @click="openAccount" data-dismiss="modal">Open Account</button>
           </div>
         </div>
       </div>
@@ -75,22 +101,43 @@ export default {
       useExFunds: false,
       fundsInput: false,
       dropdownChoice: null,
-      newAccount: {balance: 0, type: null}
+      newAccount: {balance: 0, type: null, accountNumber: null},
+      accountFrom: {},
+      
     }
   },
   computed: {
     accounts(){
-      return [ {type: "savings", accountNumber: 12345, balance: 90034}, {type: "checking", accountNumber: 23456, balance: 23415}]
+      return this.$store.state.accounts
     }
   },
   methods: {
     resetModal(){
       newAccount = {balance: 0, type: null}
+    },
+    openAccount(){
+      this.accountFrom = this.dropdownChoice
+      this.newAccount.accountNumber = Math.floor(100000000 + Math.random() * 900000000);
+      this.$store.dispatch("openAccount", this.newAccount)
+      console.log("accounts:")
+      console.log(this.newAccount)
+      console.log(this.accountFrom)
+      if(this.newAccount.balance > 0){
+        this.$store.dispatch("transferFunds", {to: this.newAccount, from: this.accountFrom, amount: this.newAccount.balance});
+        
+      }
+      this.newAccount = {balance: 0, type: null, accountNumber: null}
+    },
+    generateAccountNumber(){
+      let accountNumber = Math.floor(100000000 + Math.random() * 900000000);
+      return accountNumber;
     }
   }
 }
 </script>
 
 <style>
-
+.text-right{
+  text-align: right;
+}
 </style>
