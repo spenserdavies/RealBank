@@ -1,5 +1,18 @@
 -- USE keepr13;
 
+
+  CREATE TABLE accounts (
+      id int NOT NULL AUTO_INCREMENT,
+      userId VARCHAR(255),
+      accountType VARCHAR(255),
+      balance int NOT NULL DEFAULT 0,
+      accountNumber int NOT NULL,
+      INDEX userId(userId),
+      PRIMARY KEY (id)
+  )
+
+
+
 -- CREATE TABLE vaults (
 --     id int NOT NULL AUTO_INCREMENT,
 --     name VARCHAR(255) NOT NULL,
