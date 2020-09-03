@@ -19,6 +19,12 @@ namespace realbank.Repositories
             return _db.Query<Account>(sql, new { userId });
         }
 
+        internal Account GetById(int id, string userId)
+        {
+            string sql = "SELECT * FROM accounts WHERE id = @id AND userId = @userId;";
+            return _db.QueryFirstOrDefault<Account>(sql, new { id, userId });
+        }
+
         internal Account Create(Account newAccount)
         {
             string sql = @"
