@@ -13,12 +13,15 @@
             <h5>Account #</h5>
           </div>
           <div class="col-3 col-md-4 text-center">
-            <h5>Bal.</h5>
+            <h5>Bal. ($)</h5>
           </div>
         </div>
         <div class="pb-5">
 
-        <div class="row border-bottom" v-for="account in accounts" :key="account.accountNumber">
+        <div v-for="account in accounts" :key="account.accountNumber" :account="account">
+          <router-link :to="{name: 'account', params: {accountId: account.accountNumber}}" class="text-dark">
+            <div class="row border-bottom">
+
           <div class="col-4  pt-3 text-center border-right">
             <p>{{account.type}}</p>
           </div>
@@ -26,8 +29,10 @@
             <p>{{account.accountNumber}}</p>
           </div>
           <div class="col-3 col-md-4 pt-3 text-center">
-            <p>{{account.balance}}</p>
+            <p>{{account.balance.toFixed(2)}}</p>
           </div>
+            </div>
+          </router-link>
         </div>
 
         </div>
@@ -52,14 +57,14 @@
             <form>
               <p><u>Account Type:</u></p>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="checking" v-model="newAccount.type" checked>
-                <label class="form-check-label" for="exampleRadios1">
+                <input class="form-check-input" type="radio" name="accountType" id="accountType1" value="checking" v-model="newAccount.type" checked required>
+                <label class="form-check-label" for="accountType1">
                   Checking
                 </label>
               </div>
               <div class="form-check pb-3">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="savings" v-model="newAccount.type">
-                <label class="form-check-label" for="exampleRadios2">
+                <input class="form-check-input" type="radio" name="accountType" id="accountType2" value="savings" v-model="newAccount.type">
+                <label class="form-check-label" for="accountType2">
                   Savings
                 </label>
               </div>
@@ -68,7 +73,7 @@
               <div v-if="useExFunds" class="mt-2">
                 <p><u>Select An Account To Withdraw From:</u></p>
                 <select class="custom-select" v-model="dropdownChoice">
-                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.type}} #{{account.accountNumber}} :<br> ${{account.balance}}</option>
+                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.type}} #{{account.accountNumber}} :<br> ${{account.balance.toFixed(2)}}</option>
                 </select>
                 <button type="button" class="btn btn-success my-2 float-right" @click="fundsInput=true">Select</button>
                 
@@ -116,17 +121,24 @@ export default {
       newAccount = {balance: 0, type: null}
     },
     openAccount(){
-      this.accountFrom = this.dropdownChoice
+      if(this.newAccount.type != null){
+
+        this.accountFrom = this.dropdownChoice
       this.newAccount.accountNumber = Math.floor(100000000 + Math.random() * 900000000);
       this.$store.dispatch("openAccount", this.newAccount)
       console.log("accounts:")
       console.log(this.newAccount)
       console.log(this.accountFrom)
-      if(this.newAccount.balance > 0){
+      if(this.newAccount.balance > 0 && this.newAccount.type != null){
+        this.newAccount.balance.toFixed(2);
         this.$store.dispatch("transferFunds", {to: this.newAccount, from: this.accountFrom, amount: this.newAccount.balance});
         
       }
       this.newAccount = {balance: 0, type: null, accountNumber: null}
+      } else {
+        alert("Please make sure to select an account type. Please try again")
+      }
+
     },
     generateAccountNumber(){
       let accountNumber = Math.floor(100000000 + Math.random() * 900000000);

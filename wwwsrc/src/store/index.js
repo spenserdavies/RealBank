@@ -51,9 +51,12 @@ export default new Vuex.Store({
     transferFunds({commit, dispatch}, Acs){
       if(Acs.to.balance === Acs.amount){
         Acs.from.balance -= Acs.amount;
+        Acs.from.balance.toFixed(2)
       } else {
         Acs.to.balance += Acs.amount;
+        Acs.to.balance.toFixed(2)
         Acs.from.balance -= Acs.amount;
+        Acs.from.balance.toFixed(2)
       }
       commit("transferFunds", {to: Acs.to, from: Acs.from});
     }
