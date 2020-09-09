@@ -7,8 +7,14 @@
     </div>
     <div class="row">
       <div class="col-9 px-0 pt-2 mx-auto bg-white text-info">
-        <h3 class="ml-3">Balance: ${{account.balance.toFixed(2)}}</h3>
-        <h4 class="ml-3">Account type: {{account.type}}</h4>
+        <div class="row w-100">
+          <div class="col-4">
+            <h4 class="m-3">Account type: {{account.type}}</h4>
+          </div>
+          <div class="col-4 offset-4">
+            <h3 class="m-3 float-right">Balance: ${{account.balance.toFixed(2)}}</h3>
+          </div>
+        </div>
         <button @click="newTransactionForm = true" class="btn btn-success float-right my-3 mr-3">Transaction +</button>
         <h4 class="text-center border-bottom border-info mt-4 w-50 mx-auto">Transactions</h4>
         <div class="row w-100 m-0 border-top border-bottom border-info">
@@ -17,7 +23,7 @@
           <div class="col-3 border-right border-info text-info p-1"><small><b>Memo</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Amount</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Date</b></small></div>
-          <div class="col text-info p-1"><small>Edit</small></div>
+          <div class="col text-info p-1"><small><b>Edit</b></small></div>
         </div>
         <div v-if="newTransactionForm" class="row bg-secondary border-bottom border-info m-0">
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
