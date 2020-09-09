@@ -11,8 +11,8 @@
           <div class="col-4">
             <h4 class="m-3">Account type: {{account.type}}</h4>
           </div>
-          <div class="col-4 offset-4">
-            <h3 class="m-3 float-right">Balance: ${{account.balance.toFixed(2)}}</h3>
+          <div class="col-4 offset-4 text-right">
+            <h3 class="m-3">Balance: ${{account.balance.toFixed(2)}}</h3>
           </div>
         </div>
         <button @click="newTransactionForm = true" class="btn btn-success float-right my-3 mr-3">Transaction +</button>
@@ -60,11 +60,11 @@
           <div class="col-2 border-right border-info text-info p-1">{{transaction.type}}</div>
           <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
           <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
-          <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1">-{{transaction.amount.toFixed(2)}}</div>
-          <div v-else class="col-2 border-right border-info text-info p-1">{{transaction.amount.toFixed(2)}}</div>
+          <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount.toFixed(2)}}</div>
+          <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
 
-          <div class="col-2 border-right border-info text-info p-1">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
-          <div class="col text-info p-1">O / O</div>
+          <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
+          <div class="col text-info p-1 text-center"><i class="fas fa-edit"></i> / <i class="fas fa-trash-alt"></i></div>
         </div>
 
       </div>
@@ -108,5 +108,7 @@ export default {
 </script>
 
 <style>
-
+.text-right{
+  text-align: right;
+}
 </style>
