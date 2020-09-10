@@ -6,6 +6,7 @@ import Home from "./views/Home.vue";
 import Accounts from "./views/Accounts.vue";
 // @ts-ignore
 import Account from "./views/Account.vue";
+import Budget from "./views/Budget.vue";
 import { authGuard } from "@bcwdev/auth0-vue";
 
 Vue.use(Router);
@@ -18,9 +19,9 @@ export default new Router({
       component: Home
     },
     {
-      path: "/account/:accountId",
-      name: "account",
-      component: Account,
+      path: "/budgets",
+      name: "budget",
+      component: Budget,
       beforeEnter: authGuard
     },
     {
@@ -29,5 +30,12 @@ export default new Router({
       component: Accounts,
       beforeEnter: authGuard
     },
+    {
+      path: "/account/:accountId",
+      name: "account",
+      component: Account,
+      beforeEnter: authGuard
+    },
+    
   ]
 });

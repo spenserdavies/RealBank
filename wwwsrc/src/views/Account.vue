@@ -35,12 +35,35 @@
             </div>
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
               <select class="form-control form-control-sm" v-model="newTransaction.category">
-                <option>Bills</option>
-                <option>Car</option>
-                <option>Emergency</option>
-                <option>Entertainment</option>
-                <option>Food</option>
-                <option>Misc.</option>
+                <optgroup label="Bills">
+                  <option>Cable / Internet</option>
+                  <option>Power</option>
+                  <option>Water</option>
+                  <option>Phone</option>
+                  <option>Credit Card</option>
+                  <option>Insurance</option>
+                </optgroup>
+                <optgroup label="Car">
+                  <option>Car Payment</option>
+                  <option>Car Insurance</option>
+                  <option>Car Maint.</option>
+                  <option>Gas</option>
+                </optgroup>
+                <optgroup label="Food">
+                  <option>Groceries</option>
+                  <option>Fast Food</option>
+                  <option>Restaurant</option>
+                </optgroup>
+                <optgroup label="Home">
+                  <option>Maintenance</option>
+                  <option>Tech</option>
+                  <option>Entertainment</option>
+                  <option>Furniture</option>
+                </optgroup>
+                <optgroup label="Other">
+                  <option>Emergency</option>
+                  <option>Misc.</option>
+                </optgroup>
               </select>
             </div>
             <div class="col-3 bg-secondary border-right border-bottom border-info p-1">
@@ -50,24 +73,23 @@
               <input v-model.number="newTransaction.amount" type="number" class="form-control form-control-sm" placeholder="$$$" />
             </div>
             <div class="col border-bottom border-info p-1">{{today.month}}/{{today.day}}/{{today.year}}</div>
-            <div class="col-12 bg-white">
-
-            <button class="btn btn-dark float-right mx-1 my-1" @click="newTransaction = newTransactionDefault; newTransactionForm = false">Cancel</button>
-            <button class="btn btn-success float-right ml-1 mr-1 my-1" @click="submitTransaction">Save</button>
+              <div class="col-12 bg-white">
+                <button class="btn btn-dark float-right mx-1 my-1" @click="newTransaction = newTransactionDefault; newTransactionForm = false">Cancel</button>
+                <button class="btn btn-success float-right ml-1 mr-1 my-1" @click="submitTransaction">Save</button>
+              </div>
             </div>
-        </div>
-        <div class="row w-100 m-0 border-bottom border-info" v-for="transaction in transactions" :key="transaction.id">
-          <div class="col-2 border-right border-info text-info p-1">{{transaction.type}}</div>
-          <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
-          <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
-          <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount.toFixed(2)}}</div>
-          <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
+          <div class="row w-100 m-0 border-bottom border-info" v-for="transaction in transactions" :key="transaction.id">
+            <div class="col-2 border-right border-info text-info p-1">{{transaction.type}}</div>
+            <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
+            <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
+            <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount.toFixed(2)}}</div>
+            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
 
-          <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
-          <div class="col text-info p-1 text-center"><i class="fas fa-edit"></i> / <i class="fas fa-trash-alt"></i></div>
-        </div>
+            <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
+            <div class="col text-info p-1 text-center"><i class="fas fa-edit pointer"></i> / <i @click="deleteTransaction(transaction)" class="fas fa-trash-alt pointer"></i></div>
+          </div>
 
-      </div>
+      </div>  
 
     </div>
   </div>
@@ -97,6 +119,9 @@ export default {
       this.$store.dispatch("submitTransaction", this.newTransaction);
       this.newTransaction = this.newTransactionDefault;
       this.transactionForm = false;
+    },
+    deleteTransaction(transaction){
+      console.log(transaction);
     }
   },
   mounted(){
@@ -108,6 +133,9 @@ export default {
 </script>
 
 <style>
+.pointer{
+  cursor: pointer;
+}
 .text-right{
   text-align: right;
 }
