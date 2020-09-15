@@ -15,7 +15,7 @@
             <h3 class="m-3">Balance: ${{account.balance.toFixed(2)}}</h3>
           </div>
         </div>
-        <button @click="newTransactionForm = true" class="btn btn-success float-right my-3 mr-3">Transaction +</button>
+        <button @click="newTransactionForm = true"  class="btn btn-success float-right my-3 mr-3">Transaction +</button>
         <h4 class="text-center border-bottom border-info mt-4 w-50 mx-auto">Transactions</h4>
         <div class="row w-100 m-0 border-top border-bottom border-info">
           <div class="col-2 border-right border-info text-info p-1"><small><b>Type</b></small></div>
@@ -24,6 +24,11 @@
           <div class="col-2 border-right border-info text-info p-1"><small><b>Amount</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Date</b></small></div>
           <div class="col text-info p-1"><small><b>Edit</b></small></div>
+        </div>
+        <div class="row w-100 my-5 ml-1" v-if="transactions.length == 0">
+          <div class="col-12 text-center">
+            <h5>No Transactions At This Time</h5>
+          </div>
         </div>
         <div v-if="newTransactionForm" class="row bg-secondary border-bottom border-info m-0">
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
@@ -126,7 +131,6 @@ export default {
   },
   mounted(){
     this.account = this.$store.state.accounts.filter(a => a.accountNumber == this.$route.params.accountId).pop();
-    console.log(this.account)
     this.$store.dispatch("getTransactionsByAccountNumber", this.$route.params.accountId);
   }
 }

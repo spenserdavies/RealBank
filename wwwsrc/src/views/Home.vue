@@ -5,7 +5,8 @@
         <div class="col-5 mx-auto card mt-5 text-center py-3">
           <h2>RealBank</h2>
           <hr v-if="!$auth.isAuthenticated">
-          <p v-if="!$auth.isAuthenticated" class="pt-3">Please <span @click="login" class="pointer"><u>log-in</u></span> to continue</p>
+          <p v-if="!$auth.isAuthenticated" class="pt-3">You are not signed in. Click the login button to sign in and continue</p>
+          <button v-if="!$auth.isAuthenticated" class="btn btn-info" @click="login">Login</button>
         </div>
       </div>
     </div>

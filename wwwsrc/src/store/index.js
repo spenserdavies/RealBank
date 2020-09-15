@@ -17,8 +17,8 @@ let api = Axios.create({
 
 export default new Vuex.Store({
   state: {
-    accounts: [{type: "savings", accountNumber: 12345, balance: 90034}, {type: "checking", accountNumber: 23456, balance: 23415}],
-    transactions: [{id: 1, accountNumber: 12345, type: "Withdrawal",category: "Food", memo: "groceries", amount: 30.50, date: {day: 1, month: 2, year: 2020}},{date: {day: 3, month: 7, year: 2019}, id: 2, accountNumber: 12345, type: "Deposit", memo: "paycheck",category: "Misc", amount: 750}],
+    accounts: [],
+    transactions: [],
     activeTransactions: []
   },
   mutations: {
@@ -47,6 +47,15 @@ export default new Vuex.Store({
         state.accounts[accountIndex].balance += newTransaction.amount
       }
       state.transactions.push(newTransaction);
+    },
+
+
+
+
+
+
+    setAccounts(state, accounts){
+      state.accounts = accounts;
     }
   },
   actions: {
@@ -81,6 +90,26 @@ export default new Vuex.Store({
     submitTransaction({commit, dispatch}, newTransaction){
       commit("submitTransaction", newTransaction);
       dispatch("getTransactionsByAccountNumber", newTransaction.accountNumber)
+    },
+
+
+
+
+
+    async getAccounts({commit}){
+      try {
+        let res = await api.get("accounts");
+        commit("setAccounts", res.data);
+      } catch (e) {
+        console.error(e);
+      }
     }
+
+
+
+
+
+
+
   }
 });

@@ -23,7 +23,7 @@
             <div class="row border-bottom">
 
           <div class="col-4  pt-3 text-center border-right">
-            <p>{{account.type}}</p>
+            <p>{{account.accountType}}</p>
           </div>
           <div class="col-5 col-md-4 pt-3 text-center border-right">
             <p>{{account.accountNumber}}</p>
@@ -57,13 +57,13 @@
             <form>
               <p><u>Account Type:</u></p>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="accountType" id="accountType1" value="checking" v-model="newAccount.type" checked required>
+                <input class="form-check-input" type="radio" name="accountType" id="accountType1" value="checking" v-model="newAccount.accountType" checked required>
                 <label class="form-check-label" for="accountType1">
                   Checking
                 </label>
               </div>
               <div class="form-check pb-3">
-                <input class="form-check-input" type="radio" name="accountType" id="accountType2" value="savings" v-model="newAccount.type">
+                <input class="form-check-input" type="radio" name="accountType" id="accountType2" value="savings" v-model="newAccount.accountType">
                 <label class="form-check-label" for="accountType2">
                   Savings
                 </label>
@@ -73,7 +73,7 @@
               <div v-if="useExFunds" class="mt-2">
                 <p><u>Select An Account To Withdraw From:</u></p>
                 <select class="custom-select" v-model="dropdownChoice">
-                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.type}} #{{account.accountNumber}} :<br> ${{account.balance.toFixed(2)}}</option>
+                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} :<br> ${{account.balance.toFixed(2)}}</option>
                 </select>
                 <button type="button" class="btn btn-success my-2 float-right" @click="fundsInput=true">Select</button>
                 
@@ -106,7 +106,7 @@ export default {
       useExFunds: false,
       fundsInput: false,
       dropdownChoice: null,
-      newAccount: {balance: 0, type: null, accountNumber: null},
+      newAccount: {balance: 0, accountType: null, accountNumber: null},
       accountFrom: {},
       
     }
@@ -116,25 +116,26 @@ export default {
       return this.$store.state.accounts
     }
   },
+  mounted(){
+    this.$store.dispatch("getAccounts");
+  },
   methods: {
     resetModal(){
-      newAccount = {balance: 0, type: null}
+      newAccount = {balance: 0, accountType: null}
     },
     openAccount(){
       if(this.newAccount.type != null){
 
-        this.accountFrom = this.dropdownChoice
+      this.accountFrom = this.dropdownChoice
       this.newAccount.accountNumber = Math.floor(100000000 + Math.random() * 900000000);
       this.$store.dispatch("openAccount", this.newAccount)
-      console.log("accounts:")
-      console.log(this.newAccount)
-      console.log(this.accountFrom)
-      if(this.newAccount.balance > 0 && this.newAccount.type != null){
+
+      if(this.newAccount.balance > 0 && this.newAccount.accountType != null){
         this.newAccount.balance.toFixed(2);
         this.$store.dispatch("transferFunds", {to: this.newAccount, from: this.accountFrom, amount: this.newAccount.balance});
-        
       }
-      this.newAccount = {balance: 0, type: null, accountNumber: null}
+
+      this.newAccount = {balance: 0, accountType: null, accountNumber: null}
       } else {
         alert("Please make sure to select an account type. Please try again")
       }

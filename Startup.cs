@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MySqlConnector;
+using realbank.Repositories;
+using realbank.Services;
 
 namespace Keepr
 {
@@ -53,6 +55,9 @@ namespace Keepr
 
             //NOTE REGISTER SERVICES AND REPOSITORIES
             services.AddTransient<KeepsService>();
+
+            services.AddTransient<AccountsService>();
+            services.AddTransient<AccountsRepository>();
         }
 
         private IDbConnection CreateDbConnection()
