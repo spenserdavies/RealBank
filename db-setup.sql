@@ -10,7 +10,16 @@ USE realbank;
       accountNumber int NOT NULL,
       INDEX userId(userId),
       PRIMARY KEY (id)
-  )
+  );
+
+  CREATE TABLE transactions (
+      id int NOT NULL AUTO_INCREMENT,
+      userId VARCHAR(255),
+      transactionType VARCHAR(255),
+      category VARCHAR(255),
+      memo VARCHAR(255),
+      amount int NOT NULL,
+  );
 
 
 

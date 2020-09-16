@@ -124,22 +124,19 @@ export default {
       newAccount = {balance: 0, accountType: null}
     },
     openAccount(){
-      if(this.newAccount.type != null){
-
+      if(this.newAccount.accountType != null){
       this.accountFrom = this.dropdownChoice
       this.newAccount.accountNumber = Math.floor(100000000 + Math.random() * 900000000);
       this.$store.dispatch("openAccount", this.newAccount)
-
       if(this.newAccount.balance > 0 && this.newAccount.accountType != null){
         this.newAccount.balance.toFixed(2);
         this.$store.dispatch("transferFunds", {to: this.newAccount, from: this.accountFrom, amount: this.newAccount.balance});
       }
-
+      this.$store.dispatch("openAccount", this.newAccount)
       this.newAccount = {balance: 0, accountType: null, accountNumber: null}
       } else {
-        alert("Please make sure to select an account type. Please try again")
+        // alert("Make sure to select an account type. Please try again")
       }
-
     },
     generateAccountNumber(){
       let accountNumber = Math.floor(100000000 + Math.random() * 900000000);
