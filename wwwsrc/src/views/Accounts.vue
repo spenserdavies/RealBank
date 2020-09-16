@@ -57,13 +57,13 @@
             <form>
               <p><u>Account Type:</u></p>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="accountType" id="accountType1" value="checking" v-model="newAccount.accountType" checked required>
+                <input class="form-check-input" type="radio" name="accountType" id="accountType1" value="Checking" v-model="newAccount.accountType" checked required>
                 <label class="form-check-label" for="accountType1">
                   Checking
                 </label>
               </div>
               <div class="form-check pb-3">
-                <input class="form-check-input" type="radio" name="accountType" id="accountType2" value="savings" v-model="newAccount.accountType">
+                <input class="form-check-input" type="radio" name="accountType" id="accountType2" value="Savings" v-model="newAccount.accountType">
                 <label class="form-check-label" for="accountType2">
                   Savings
                 </label>
