@@ -23,7 +23,7 @@
             >Accounts</router-link
           >
         </li>
-        <li
+        <!-- <li
           class="nav-item"
           v-if="$auth.isAuthenticated"
           :class="{ active: $route.name == 'budget' }"
@@ -31,7 +31,7 @@
           <router-link class="nav-link" :to="{ name: 'budget' }"
             >Budgets</router-link
           >
-        </li>
+        </li> -->
       </ul>
       <span class="navbar-text">
         <button
