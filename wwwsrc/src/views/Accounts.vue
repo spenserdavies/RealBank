@@ -68,22 +68,6 @@
                   Savings
                 </label>
               </div>
-              
-              <input type="checkbox" v-model="useExFunds" class="mr-2" @click="newAccount.balance = 0; dropdownCoice = null"/>Open Using Existing Funds?
-              <div v-if="useExFunds" class="mt-2">
-                <p><u>Select An Account To Withdraw From:</u></p>
-                <select class="custom-select" v-model="dropdownChoice">
-                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} :<br> ${{account.balance.toFixed(2)}}</option>
-                </select>
-                <button type="button" class="btn btn-success my-2 float-right" @click="fundsInput=true">Select</button>
-                
-              <div v-if="fundsInput" class="mt-5 pt-2">
-                <p><u>Enter a Dollar Amount To Open the Account With:</u></p>
-                <small>Maximum Amount: {{dropdownChoice.balance}} </small>
-                <input type="number" class="form-control mb-3" min="0" :max="dropdownChoice.balance" placeholder="$$$" v-model.number="newAccount.balance" />
-
-              </div>
-              </div>
             </form>
           </div>
           
@@ -103,12 +87,7 @@ export default {
   name: "accounts",
   data(){
     return {
-      useExFunds: false,
-      fundsInput: false,
-      dropdownChoice: null,
       newAccount: {balance: 0, accountType: null, accountNumber: null},
-      accountFrom: {},
-      
     }
   },
   computed: {
@@ -125,24 +104,14 @@ export default {
     },
     openAccount(){
       if(this.newAccount.accountType != null){
-      this.accountFrom = this.dropdownChoice
       this.newAccount.accountNumber = Math.floor(100000000 + Math.random() * 900000000);
-      this.$store.dispatch("openAccount", this.newAccount)
-      if(this.newAccount.balance > 0 && this.newAccount.accountType != null){
-        this.newAccount.balance.toFixed(2);
-        this.$store.dispatch("transferFunds", {to: this.newAccount, from: this.accountFrom, amount: this.newAccount.balance});
-      }
-      this.$store.dispatch("openAccount", this.newAccount)
-      this.newAccount = {balance: 0, accountType: null, accountNumber: null}
+      // this.$store.dispatch("openAccount", this.newAccount)
+      this.$store.dispatch("newAccount", this.newAccount);
       } else {
-        // alert("Make sure to select an account type. Please try again")
+        alert("Make sure to select an account type. Please try again")
       }
-    },
-    generateAccountNumber(){
-      let accountNumber = Math.floor(100000000 + Math.random() * 900000000);
-      return accountNumber;
-    }
-  }
+  },
+}
 }
 </script>
 

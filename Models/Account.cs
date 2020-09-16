@@ -15,7 +15,6 @@ namespace realbank.Models
         [Required]
         public string AccountType { get; set; }
 
-        [Required]
         public string UserId { get; set; }
     }
 }

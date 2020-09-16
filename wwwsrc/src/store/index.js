@@ -96,12 +96,35 @@ export default new Vuex.Store({
 
 
 
-    async getAccounts({commit}){
+    // async getAccounts({commit}){
+    //   try {
+    //     let res = await api.get("accounts");
+    //     commit("setAccounts", res.data);
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
+    getAccounts({commit}){
+      api.get('accounts')
+        .then(res => {
+          commit("setAccounts", res.data);
+        })
+        .catch(e => console.error(e))
+    },
+    async newAccount({commit, dispatch}, newAccount){
       try {
-        let res = await api.get("accounts");
-        commit("setAccounts", res.data);
+        let res = await api.post("accounts", newAccount);
+        dispatch("getAccounts");
       } catch (e) {
-        console.error(e);
+        console.error(e)
+      }
+    },
+    async editBalance({commit, dispatch}, account){
+      try {
+        let res = await api.put("accounts/" + account.id, account);
+        dispatch("getAccounts");
+      } catch (e) {
+        console.error(e)
       }
     }
 
