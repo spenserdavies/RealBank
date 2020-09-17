@@ -97,6 +97,5 @@ namespace realbank.Controllers
                 return BadRequest(e.Message);
             }
         }
-
     }
 }

@@ -3,7 +3,8 @@
     <div class="row mt-5">
       <div class="col-9 mx-auto card bg-light pt-4">
         <h2 class="text-center">Accounts</h2>
-        <button type="button" class="btn btn-success mx-auto my-2" data-toggle="modal" data-target="#newAccount" @click="newAccount.accountNumber = null">New Account</button>
+        <button type="button" class="btn btn-success w-25 align-self-center my-2 position-relative" data-toggle="modal" data-target="#newAccount" @click="newAccount.accountNumber = null">New Account</button>
+        <button type="button" class="btn btn-warning w-25 align-self-end position-absolute transfer-btn" data-toggle="modal" data-target="#transferFunds">Transfer Funds</button>
         <hr>
         <div class="row border-bottom pb-3 pt-2">
           <div class="col-4 text-center">
@@ -79,6 +80,44 @@
       </div>
     </div>
 
+    <div class="modal fade" id="transferFunds" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Transfer Funds</h5>
+            <button type="button" class="close" data-dismiss="modal" @click="resetModal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="newTransfer">
+              <p>Select an Account To Withdraw From:</p>
+              <select class="custom-select" v-model="accountFrom">
+                  <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} : ${{account.balance}}</option>
+                </select>
+                <div v-if="Object.keys(accountFrom).length > 0">
+                  <p class="mt-5">Select an Account To Deposit To:</p>
+                    <select class="custom-select" v-model="accountTo">
+                      <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} : ${{account.balance}}</option>
+                    </select>
+                  
+                </div>
+                <div v-if="Object.keys(accountTo).length > 0" class="mt-5 pt-2">
+                <p><u>Enter a Dollar Amount To Open the Account With:</u></p>
+                <small>Maximum Amount: {{accountFrom.balance}} </small>
+                <input type="number" class="form-control mb-3" min="0" :max="accountFrom.balance" placeholder="$$$" v-model.number="transferAmount" step="0.01"/>
+              </div>
+                <button type="submit" class="btn btn-warning float-right" v-if="transferAmount > 0">Transfer</button>
+            </form>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal" @click="resetModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -88,6 +127,11 @@ export default {
   data(){
     return {
       newAccount: {balance: 0, accountType: null, accountNumber: null},
+      accountFrom: {},
+      accountTo: {},
+      fromSelection: false,
+      toSelection: false,
+      transferAmount: null,
     }
   },
   computed: {
@@ -111,6 +155,19 @@ export default {
         alert("Make sure to select an account type. Please try again")
       }
   },
+  newTransfer(){
+    this.accountTo.balance += this.transferAmount
+    this.$store.dispatch("editBalance", this.accountTo);
+    console.log("TO")
+    console.log(this.accountTo)
+    this.accountFrom.balance -= this.transferAmount
+    this.$store.dispatch("editBalance", this.accountFrom)
+    console.log("FROM")
+    console.log(this.accountFrom);
+    console.log("AMOUNT")
+    console.log(this.transferAmount)
+    $("#transferFunds").modal("hide");
+  }
 }
 }
 </script>
@@ -118,5 +175,8 @@ export default {
 <style>
 .text-right{
   text-align: right;
+}
+.transfer-btn{
+  top: 4.8em;
 }
 </style>

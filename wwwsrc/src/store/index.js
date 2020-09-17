@@ -19,7 +19,9 @@ export default new Vuex.Store({
   state: {
     accounts: [],
     transactions: [],
-    activeTransactions: []
+    activeTransactions: [],
+    accountTo: {},
+    accountFrom: {},
   },
   mutations: {
     openAccount(state, newAccount){
@@ -56,7 +58,13 @@ export default new Vuex.Store({
 
     setAccounts(state, accounts){
       state.accounts = accounts;
-    }
+    },
+    setActiveTo(state, accountTo){
+      state.accountTo = accountTo;
+    },
+    setActiveFrom(state,accountFrom){
+      state.accountFrom = accountFrom;
+    },
   },
   actions: {
     setBearer({}, bearer) {
@@ -111,6 +119,30 @@ export default new Vuex.Store({
         })
         .catch(e => console.error(e))
     },
+    async getAccountById({commit, dispatch}, accountId){
+      try {
+        let res = await api.get("accounts/" + accountId);
+        commit("setActiveAccount", res.data)
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async getAccountToById({commit, dispatch}, accountId){
+      try {
+        let res = await api.get("accounts/" + accountId);
+        commit("setActiveTo", res.data) 
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async getAccountFromById({commit, dispatch}, accountId){
+      try {
+        let res = await api.get("accounts/"+ accountId);
+        commit("setActiveFrom", res.data)
+      } catch (e) {
+        
+      }
+    },
     async newAccount({commit, dispatch}, newAccount){
       try {
         let res = await api.post("accounts", newAccount);
@@ -126,13 +158,7 @@ export default new Vuex.Store({
       } catch (e) {
         console.error(e)
       }
-    }
-
-
-
-
-
-
+    },
 
   }
 });
