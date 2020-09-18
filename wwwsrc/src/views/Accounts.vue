@@ -85,7 +85,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Transfer Funds</h5>
-            <button type="button" class="close" data-dismiss="modal" @click="resetModal">
+            <button type="button" class="close" data-dismiss="modal">
               <span>&times;</span>
             </button>
           </div>
@@ -112,7 +112,7 @@
           </div>
           
           <div class="modal-footer">
-            <button type="button" class="btn btn-dark" data-dismiss="modal" @click="resetModal">Close</button>
+            <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default {
   },
   methods: {
     resetModal(){
-      newAccount = {balance: 0, accountType: null}
+      this.newAccount = {balance: 0, accountType: null}
     },
     openAccount(){
       if(this.newAccount.accountType != null){
@@ -158,15 +158,13 @@ export default {
   newTransfer(){
     this.accountTo.balance += this.transferAmount
     this.$store.dispatch("editBalance", this.accountTo);
-    console.log("TO")
-    console.log(this.accountTo)
     this.accountFrom.balance -= this.transferAmount
     this.$store.dispatch("editBalance", this.accountFrom)
-    console.log("FROM")
-    console.log(this.accountFrom);
-    console.log("AMOUNT")
-    console.log(this.transferAmount)
+    this.accountTo = {};
+    this.accountFrom = {};
+    this.transferAmount = null;
     $("#transferFunds").modal("hide");
+
   }
 }
 }

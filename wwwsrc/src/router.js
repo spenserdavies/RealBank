@@ -6,6 +6,7 @@ import Home from "./views/Home.vue";
 import Accounts from "./views/Accounts.vue";
 // @ts-ignore
 import Account from "./views/Account.vue";
+// @ts-ignore
 import Budget from "./views/Budget.vue";
 import { authGuard } from "@bcwdev/auth0-vue";
 

@@ -75,7 +75,7 @@
               <input v-model="newTransaction.memo" type="text" class="form-control form-control-sm" placeholder="groceries"/>
             </div>
             <div class="col-2 p-1 bg-secondary border-right border-bottom border-info">
-              <input v-model.number="newTransaction.amount" type="number" class="form-control form-control-sm" placeholder="$$$" />
+              <input v-model.number="newTransaction.amount" type="number" class="form-control form-control-sm" placeholder="$$$" step="0.01"/>
             </div>
             <div class="col border-bottom border-info p-1">{{today.month}}/{{today.day}}/{{today.year}}</div>
               <div class="col-12 bg-white">
@@ -83,19 +83,48 @@
                 <button class="btn btn-success float-right ml-1 mr-1 my-1" @click="submitTransaction">Save</button>
               </div>
             </div>
+          
+        <div v-show="transactions.length > 0">
           <div class="row w-100 m-0 border-bottom border-info" v-for="transaction in transactions" :key="transaction.id">
             <div class="col-2 border-right border-info text-info p-1">{{transaction.type}}</div>
             <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
             <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
-            <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount.toFixed(2)}}</div>
-            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
+            <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount}}</div>
+            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount}}</div>
 
             <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
             <div class="col text-info p-1 text-center"><i class="fas fa-edit pointer"></i> / <i @click="deleteTransaction(transaction)" class="fas fa-trash-alt pointer"></i></div>
           </div>
-
+        </div>
+        <button class="btn btn-danger float-right m-3" data-toggle="modal" data-target="#closeAccount">CLOSE ACCOUNT</button>
       </div>  
 
+    </div>
+    <div class="modal fade" id="closeAccount" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Transfer Funds</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="newTransfer">
+                <div>
+                  <p class="mt-1">Select an Account Move Funds Into:</p>
+                    <select class="custom-select" v-model="accountTo">
+                      <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} : ${{account.balance.toFixed(2)}}</option>
+                    </select>
+                </div>
+            </form>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal" @click="resetModal">Cancel</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -109,12 +138,17 @@ export default {
       newTransactionForm: false,
       newTransaction: {accountNumber: this.$route.params.accountId},
       newTransactionDefault: {accountNumber: this.$route.params.accountId},
-      today: {day: new Date().getDay(), month: new Date().getMonth(), year: new Date().getFullYear()}
+      today: {day: new Date().getDay(), month: new Date().getMonth(), year: new Date().getFullYear()},
+      accountTo: {},
+      accountFrom: {},
     }
   },
   computed: {
     transactions(){
       return this.$store.state.activeTransactions.reverse();
+    },
+    accounts(){
+      return this.$store.state.accounts.filter(a => a.id != this.account.id);
     }
   },
   methods: {
@@ -127,6 +161,9 @@ export default {
     },
     deleteTransaction(transaction){
       console.log(transaction);
+    },
+    resetModal(){
+      this.accountTo = {}
     }
   },
   mounted(){
