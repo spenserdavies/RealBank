@@ -159,6 +159,14 @@ export default new Vuex.Store({
         console.error(e)
       }
     },
+    async deleteAccount({commit, dispatch}, accountId){
+      try {
+        let res = await api.delete("accounts/" + accountId)
+        dispatch("getAccounts");
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
   }
 });

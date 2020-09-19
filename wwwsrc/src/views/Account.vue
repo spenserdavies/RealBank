@@ -110,13 +110,14 @@
             </button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="newTransfer">
+            <form @submit.prevent="deleteAccount">
                 <div>
-                  <p class="mt-1">Select an Account Move Funds Into:</p>
-                    <select class="custom-select" v-model="accountTo">
+                  <p class="mt-1">Select An Account To Move Funds Into:</p>
+                    <select class="custom-select" v-model="accountTo" required>
                       <option v-for="account in accounts" :key="account.accountNumber" :value="account">{{account.accountType}} #{{account.accountNumber}} : ${{account.balance.toFixed(2)}}</option>
                     </select>
                 </div>
+                <button type="submit" class="btn btn-danger mt-3 mb-0 float-right">CLOSE ACCOUNT</button>
             </form>
           </div>
           
@@ -164,6 +165,17 @@ export default {
     },
     resetModal(){
       this.accountTo = {}
+    },
+    deleteAccount(){
+      if(Object.entries(this.accountTo).length != 0){
+      let transferAmount = this.account.balance;
+      this.accountTo.balance += this.account.balance
+      this.account.balance = 0
+      this.$store.dispatch("editBalance", this.accountTo);
+      this.$store.dispatch("deleteAccount", this.account.id)
+      $("#closeAccount").modal("hide");
+      this.$router.push({ path: '/accounts' })
+      }
     }
   },
   mounted(){
