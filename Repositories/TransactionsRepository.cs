@@ -35,7 +35,32 @@ namespace realbank.Repositories
             SELECT LAST_INSERT_ID();";
             newTransaction.Id = _db.ExecuteScalar<int>(sql, newTransaction);
             return newTransaction;
-        },
+        }
+
+        internal bool Edit(Transaction transactionToUpdate)
+        {
+            string sql = @"
+            UPDATE transactions
+            SET
+                accountNumber = @AccountNumber,
+                amount = @Amount,
+                transactionType = @TransactionType,
+                category = @Category,
+                memo = @Memo,
+                date = @Date,
+                userId = @UserId
+            WHERE id = @Id
+            AND userId = @UserId;";
+            int affectedRows = _db.Execute(sql, transactionToUpdate);
+            return affectedRows == 1;
+        }
+
+        internal bool Delete(int id, string userId)
+        {
+            string sql = "DELETE FROM transactions WHERE id = @id AND userId = @userId LIMIT 1;";
+            int affectedRows = _db.Execute(sql, new { id, userId });
+            return affectedRows == 1;
+        }
         
     }
 }
