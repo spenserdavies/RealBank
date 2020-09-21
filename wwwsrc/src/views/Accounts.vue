@@ -160,11 +160,12 @@ export default {
     // this.$store.dispatch("editBalance", this.accountTo);
     // this.accountFrom.balance -= this.transferAmount
     // this.$store.dispatch("editBalance", this.accountFrom)
-    let transTo = {accountNumber: this.accountTo.accountNumber, memo: "Transfer from account", category: "Transfer", transactionType: "Deposit", amount: this.transferAmount}
+    if(this.accountTo !== this.accountFrom){
+      let transTo = {accountNumber: this.accountTo.accountNumber, memo: "Transfer from account", category: "Transfer", transactionType: "Deposit", amount: this.transferAmount, date: new Date().toISOString().slice(0,10)}
     this.$store.dispatch("newTransaction", transTo);
     this.accountTo.balance += this.transferAmount;
     this.$store.dispatch("editBalance", this.accountTo)
-    let transFrom = {accountNumber: this.accountFrom.accountNumber, memo: "Transfer to account", category: "Transfer", transactionType: "Withdrawal", amount: (this.transferAmount)}
+    let transFrom = {accountNumber: this.accountFrom.accountNumber, memo: "Transfer to account", category: "Transfer", transactionType: "Withdrawal", amount: (this.transferAmount), date: new Date().toISOString().slice(0,10)}
     this.$store.dispatch("newTransaction", transFrom);
     this.accountFrom.balance -= this.transferAmount;
     this.$store.dispatch("editBalance", this.accountFrom);
@@ -173,6 +174,7 @@ export default {
     this.accountFrom = {};
     this.transferAmount = null;
     $("#transferFunds").modal("hide");
+    }
 
   }
 }
