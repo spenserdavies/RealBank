@@ -94,7 +94,7 @@
             <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
             <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
             <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount}}</div>
-            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
+            <div v-else class="col-2 border-right border-info text-info p-1 text-right"><span v-if="transaction.transactionType == 'Withdrawal'">-</span>{{transaction.amount.toFixed(2)}}</div>
 
             <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date}}</div>
             <div class="col text-info p-1 text-center"><i class="fas fa-edit pointer"></i> / <i @click="deleteTransaction(transaction)" class="fas fa-trash-alt pointer"></i></div>
@@ -192,10 +192,12 @@ export default {
       if(Object.entries(this.accountTo).length != 0){
       let transferAmount = this.account.balance;
       this.accountTo.balance += this.account.balance
-      this.account.balance = 0
+      let transfer = {accountNumber: this.accountTo.accountNumber, memo: "From Closed Account", category: "Transfer", transactionType: "Deposit", amount: transferAmount, date: new Date().toISOString().slice(0,10)}
       this.$store.dispatch("editBalance", this.accountTo);
+      this.$store.dispatch("newTransaction", transfer);
       this.$store.dispatch("deleteAccount", this.account.id)
       $("#closeAccount").modal("hide");
+      this.account.balance = 0
       this.$router.push({ path: '/accounts' })
       }
     }

@@ -132,6 +132,8 @@ export default {
       fromSelection: false,
       toSelection: false,
       transferAmount: null,
+      cashDeposit: false,
+      depositAmount: null,
     }
   },
   computed: {
