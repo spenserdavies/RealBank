@@ -52,5 +52,53 @@ namespace realbank.Controllers
                 return BadRequest(e.Message);
             }            
         }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult<Transaction> Create([FromBody] Transaction newTransaction)
+        {
+            try
+            {
+                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                newTransaction.UserId = userId;
+                return Ok(_ts.Create(newTransaction));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public ActionResult<Transaction> Edit(int id, [FromBody] Transaction transactionToUpdate)
+        {
+            try
+            {
+                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                transactionToUpdate.UserId = userId;
+                transactionToUpdate.Id = id;
+                return Ok(_ts.Edit(transactionToUpdate));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public ActionResult<string> Delete(int id)
+        {
+            try
+            {
+                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                return Ok(_ts.Delete(id, userId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
