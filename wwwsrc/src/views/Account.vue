@@ -8,10 +8,10 @@
     <div class="row">
       <div class="col-9 px-0 pt-2 mx-auto bg-white text-info">
         <div class="row w-100">
-          <div class="col-4">
-            <h4 class="m-3">Account type: {{account.type}}</h4>
+          <div class="col-6">
+            <h4 class="m-3">Account type: {{account.accountType}}</h4>
           </div>
-          <div class="col-4 offset-4 text-right">
+          <div class="col-6 text-right">
             <h3 class="m-3">Balance: ${{account.balance.toFixed(2)}}</h3>
           </div>
         </div>
@@ -21,9 +21,9 @@
           <div class="col-2 border-right border-info text-info p-1"><small><b>Type</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Category</b></small></div>
           <div class="col-3 border-right border-info text-info p-1"><small><b>Memo</b></small></div>
-          <div class="col-2 border-right border-info text-info p-1"><small><b>Amount ($)</b></small></div>
-          <div class="col-2 border-right border-info text-info p-1"><small><b>Date</b></small></div>
-          <div class="col text-info p-1"><small><b>Edit</b></small></div>
+          <div class="col-2 border-right border-info text-info p-1 text-right"><small><b>Amount ($)</b></small></div>
+          <div class="col-2 border-right border-info text-info text-right p-1"><small><b>Date</b></small></div>
+          <div class="col text-info p-1 text-center"><small><b>Edit</b></small></div>
         </div>
         <div class="row w-100 my-5 ml-1" v-if="transactions.length == 0 && newTransactionForm == false">
           <div class="col-12 text-center">
@@ -40,6 +40,10 @@
             </div>
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
               <select class="form-control form-control-sm" v-model="newTransaction.category" required>
+                <optgroup label="Deposits">
+                  <option>Paycheck</option>
+                  <option>Cash Deposit</option>
+                </optgroup>
                 <optgroup label="Bills">
                   <option>Cable / Internet</option>
                   <option>Power</option>
@@ -138,7 +142,7 @@ export default {
       account: this.$store.state.accounts.filter(a => a.accountNumber == this.$route.params.accountId).pop(),
       newTransactionForm: false,
       newTransaction: {accountNumber: this.$route.params.accountId},
-      newTransactionDefault: {accountNumber: this.$route.params.accountId},
+      newTransactionDefault: {accountNumber: this.$route.params.accountId, memo: null, transactionType: null, category: null, amount: null},
       accountTo: {},
       accountFrom: {},
     }
