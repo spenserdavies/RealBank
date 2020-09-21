@@ -20,7 +20,7 @@
         <div class="row w-100 m-0 border-top border-bottom border-info">
           <div class="col-2 border-right border-info text-info p-1"><small><b>Type</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Category</b></small></div>
-          <div class="col-3 border-right border-info text-info p-1"><small><b>Memo</b></small></div>
+          <div class="col-3 border-right border-info text-info p-1"><small><b>Payee / Memo</b></small></div>
           <div class="col-2 border-right border-info text-info p-1 text-right"><small><b>Amount ($)</b></small></div>
           <div class="col-2 border-right border-info text-info text-right p-1"><small><b>Date</b></small></div>
           <div class="col text-info p-1 text-center"><small><b>Edit</b></small></div>
