@@ -21,25 +21,25 @@
           <div class="col-2 border-right border-info text-info p-1"><small><b>Type</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Category</b></small></div>
           <div class="col-3 border-right border-info text-info p-1"><small><b>Memo</b></small></div>
-          <div class="col-2 border-right border-info text-info p-1"><small><b>Amount</b></small></div>
+          <div class="col-2 border-right border-info text-info p-1"><small><b>Amount ($)</b></small></div>
           <div class="col-2 border-right border-info text-info p-1"><small><b>Date</b></small></div>
           <div class="col text-info p-1"><small><b>Edit</b></small></div>
         </div>
-        <div class="row w-100 my-5 ml-1" v-if="transactions.length == 0">
+        <div class="row w-100 my-5 ml-1" v-if="transactions.length == 0 && newTransactionForm == false">
           <div class="col-12 text-center">
             <h5>No Transactions At This Time</h5>
           </div>
         </div>
         <div v-if="newTransactionForm" class="row bg-secondary border-bottom border-info m-0">
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
-              <select class="form-control form-control-sm" v-model="newTransaction.type">
+              <select class="form-control form-control-sm" v-model="newTransaction.transactionType" required>
                 <option selected>Withdrawal</option>
                 <option>Deposit</option>
                 <!-- <option>Transfer</option> -->
               </select>
             </div>
             <div class="col-2 bg-secondary border-right border-bottom border-info p-1">
-              <select class="form-control form-control-sm" v-model="newTransaction.category">
+              <select class="form-control form-control-sm" v-model="newTransaction.category" required>
                 <optgroup label="Bills">
                   <option>Cable / Internet</option>
                   <option>Power</option>
@@ -72,12 +72,12 @@
               </select>
             </div>
             <div class="col-3 bg-secondary border-right border-bottom border-info p-1">
-              <input v-model="newTransaction.memo" type="text" class="form-control form-control-sm" placeholder="groceries"/>
+              <input v-model="newTransaction.memo" type="text" class="form-control form-control-sm" placeholder="groceries" required/>
             </div>
             <div class="col-2 p-1 bg-secondary border-right border-bottom border-info">
-              <input v-model.number="newTransaction.amount" type="number" class="form-control form-control-sm" placeholder="$$$" step="0.01"/>
+              <input v-model.number="newTransaction.amount" type="number" class="form-control form-control-sm" placeholder="$$$" step="0.01" required/>
             </div>
-            <div class="col border-bottom border-info p-1">{{today.month}}/{{today.day}}/{{today.year}}</div>
+            <div class="col border-bottom border-info p-1">{{new Date().toISOString().slice(0,10)}}</div>
               <div class="col-12 bg-white">
                 <button class="btn btn-dark float-right mx-1 my-1" @click="newTransaction = newTransactionDefault; newTransactionForm = false">Cancel</button>
                 <button class="btn btn-success float-right ml-1 mr-1 my-1" @click="submitTransaction">Save</button>
@@ -86,13 +86,13 @@
           
         <div v-show="transactions.length > 0">
           <div class="row w-100 m-0 border-bottom border-info" v-for="transaction in transactions" :key="transaction.id">
-            <div class="col-2 border-right border-info text-info p-1">{{transaction.type}}</div>
+            <div class="col-2 border-right border-info text-info p-1">{{transaction.transactionType}}</div>
             <div class="col-2 border-right border-info text-info p-1">{{transaction.category}}</div>
             <div class="col-3 border-right border-info text-info p-1">{{transaction.memo}}</div>
             <div v-if="transaction.type == 'Withdrawal'" class="col-2 border-right border-info text-danger p-1 text-right">-{{transaction.amount}}</div>
-            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount}}</div>
+            <div v-else class="col-2 border-right border-info text-info p-1 text-right">{{transaction.amount.toFixed(2)}}</div>
 
-            <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date.month}}/{{transaction.date.day}}/{{transaction.date.year}}</div>
+            <div class="col-2 border-right border-info text-info p-1 text-right">{{transaction.date}}</div>
             <div class="col text-info p-1 text-center"><i class="fas fa-edit pointer"></i> / <i @click="deleteTransaction(transaction)" class="fas fa-trash-alt pointer"></i></div>
           </div>
         </div>
@@ -135,33 +135,51 @@ export default {
   name: "account",
   data(){
     return{
-      account: {},
+      account: this.$store.state.accounts.filter(a => a.accountNumber == this.$route.params.accountId).pop(),
       newTransactionForm: false,
       newTransaction: {accountNumber: this.$route.params.accountId},
       newTransactionDefault: {accountNumber: this.$route.params.accountId},
-      today: {day: new Date().getDay(), month: new Date().getMonth(), year: new Date().getFullYear()},
       accountTo: {},
       accountFrom: {},
     }
   },
   computed: {
     transactions(){
-      return this.$store.state.activeTransactions.reverse();
+      return this.$store.state.transactions.filter(t => t.accountNumber == this.account.accountNumber).reverse();
     },
     accounts(){
       return this.$store.state.accounts.filter(a => a.id != this.account.id);
-    }
+    },
+
   },
   methods: {
     submitTransaction(){
-      this.newTransaction.id = Math.floor(Math.random() * 999999);
-      this.newTransaction.date = this.today;
-      this.$store.dispatch("submitTransaction", this.newTransaction);
+      let x = this.newTransaction
+      if(x.amount != null && x.transactionType!=null && x.memo != null && x.category != null){
+
+        this.newTransaction.id = Math.floor(Math.random() * 999999);
+      this.newTransaction.date = new Date().toISOString().slice(0,10);
+      this.$store.dispatch("newTransaction", this.newTransaction);
+      if(this.newTransaction.transactionType == "Withdrawal"){
+        this.account.balance -= this.newTransaction.amount
+      }
+      if(this.newTransaction.transactionType == "Deposit"){
+        this.account.balance += this.newTransaction.amount;
+      }
+      this.$store.dispatch("editBalance", this.account);
       this.newTransaction = this.newTransactionDefault;
       this.transactionForm = false;
+      }
     },
     deleteTransaction(transaction){
-      console.log(transaction);
+      if(transaction.transactionType == "Deposit"){
+        this.account.balance -= transaction.amount;
+      }
+      if(transaction.transactionType == "Withdrawal"){
+        this.account.balance += transaction.amount;
+      }
+      this.$store.dispatch("editBalance", this.account);
+      this.$store.dispatch("deleteTransaction", transaction);
     },
     resetModal(){
       this.accountTo = {}
@@ -180,7 +198,7 @@ export default {
   },
   mounted(){
     this.account = this.$store.state.accounts.filter(a => a.accountNumber == this.$route.params.accountId).pop();
-    this.$store.dispatch("getTransactionsByAccountNumber", this.$route.params.accountId);
+    this.$store.dispatch("getTransactions");
   }
 }
 </script>

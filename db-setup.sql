@@ -1,25 +1,33 @@
--- USE keepr13;
+
 USE realbank;
 
 
-  CREATE TABLE accounts (
-      id int NOT NULL AUTO_INCREMENT,
-      userId VARCHAR(255),
-      accountType VARCHAR(255),
-      balance int NOT NULL DEFAULT 0,
-      accountNumber int NOT NULL,
-      INDEX userId(userId),
-      PRIMARY KEY (id)
-  );
+  -- CREATE TABLE accounts (
+  --     id int NOT NULL AUTO_INCREMENT,
+  --     userId VARCHAR(255),
+  --     accountType VARCHAR(255),
+  --     balance int NOT NULL DEFAULT 0,
+  --     accountNumber int NOT NULL,
+  --     INDEX userId(userId),
+  --     PRIMARY KEY (id)
+  -- );
 
   CREATE TABLE transactions (
       id int NOT NULL AUTO_INCREMENT,
       userId VARCHAR(255),
       transactionType VARCHAR(255),
+      accountNumber int NOT NULL,
       category VARCHAR(255),
       memo VARCHAR(255),
+      date VARCHAR(255),
       amount int NOT NULL,
+      INDEX userId(userId),
+      PRIMARY KEY(id)
   );
+
+-- DROP TABLE transactions;
+
+
 
 
 

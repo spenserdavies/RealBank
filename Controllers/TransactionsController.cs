@@ -92,7 +92,12 @@ namespace realbank.Controllers
         {
             try
             {
-                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+                string userId = "";
+                if(claim != null)
+                {
+                    userId = claim.Value;
+                }
                 return Ok(_ts.Delete(id, userId));
             }
             catch (Exception e)

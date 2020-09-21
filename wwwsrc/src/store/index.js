@@ -65,6 +65,9 @@ export default new Vuex.Store({
     setActiveFrom(state,accountFrom){
       state.accountFrom = accountFrom;
     },
+    setTransactions(state, transactions){
+      state.transactions = transactions;
+    }
   },
   actions: {
     setBearer({}, bearer) {
@@ -165,6 +168,30 @@ export default new Vuex.Store({
         dispatch("getAccounts");
       } catch (e) {
         console.error(e);
+      }
+    },
+    async getTransactions({commit, dispatch}){
+      try {
+        let res = await api.get("transactions");
+        commit("setTransactions", res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async newTransaction({commit, dispatch}, newTransaction){
+      try {
+        let res = await api.post("transactions", newTransaction);
+        dispatch("getTransactions");
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    async deleteTransaction({commit, dispatch}, transaction){
+      try {
+        let res = await api.delete("transactions/" + transaction.id, transaction);
+        dispatch("getTransactions")
+      } catch (e) {
+        console.error(e)
       }
     }
 

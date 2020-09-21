@@ -22,7 +22,7 @@ namespace realbank.Repositories
         internal Transaction GetById(int id, string userId)
         {
             string sql = "SELECT * FROM transactions WHERE id = @id AND userId = @userId";
-            return _db.QueryFirstOrDefault<Transaction>(sql, new { id });
+            return _db.QueryFirstOrDefault<Transaction>(sql, new { id, userId });
         }
 
         internal Transaction Create(Transaction newTransaction)
@@ -31,7 +31,7 @@ namespace realbank.Repositories
             INSERT INTO transactions
             (accountNumber, amount, transactionType, category, memo, date, userId)
             VALUES
-            (@AccountNumber, @Amount, @TransactionType, @Category, @Memo, @Date, @UserId)
+            (@AccountNumber, @Amount, @TransactionType, @Category, @Memo, @Date, @UserId);
             SELECT LAST_INSERT_ID();";
             newTransaction.Id = _db.ExecuteScalar<int>(sql, newTransaction);
             return newTransaction;

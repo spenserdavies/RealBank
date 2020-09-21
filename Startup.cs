@@ -58,6 +58,9 @@ namespace Keepr
 
             services.AddTransient<AccountsService>();
             services.AddTransient<AccountsRepository>();
+
+            services.AddTransient<TransactionsService>();
+            services.AddTransient<TransactionsRepository>();
         }
 
         private IDbConnection CreateDbConnection()
