@@ -196,6 +196,7 @@ export default {
       this.$store.dispatch("editBalance", this.accountTo);
       this.$store.dispatch("newTransaction", transfer);
       this.$store.dispatch("deleteAccount", this.account.id)
+      this.$store.dispatch("deleteAccountTransactions", this.account.id)
       $("#closeAccount").modal("hide");
       this.account.balance = 0
       this.$router.push({ path: '/accounts' })

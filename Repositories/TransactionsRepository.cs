@@ -61,6 +61,13 @@ namespace realbank.Repositories
             int affectedRows = _db.Execute(sql, new { id, userId });
             return affectedRows == 1;
         }
+
+        internal bool DeleteAccountTransactions(int accountNumber, string userId)
+        {
+            string sql = "DELETE FROM transactions WHERE accountNumber = @accountNumber AND userId = @userId;";
+            int affectedRows = _db.Execute(sql, new { accountNumber, userId });
+            return affectedRows >= 1;
+        }
         
     }
 }

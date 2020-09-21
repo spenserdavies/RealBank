@@ -56,5 +56,13 @@ namespace realbank.Services
             }
             throw new Exception("Something went wrong");
         }
+
+        internal string DeleteAllTransactions(int accountNumber, string userId)
+        {
+            if(_repo.DeleteAccountTransactions(accountNumber, userId)){
+                return "Transactions deleted";
+            }
+            throw new Exception("Something went wrong");
+        }
     }
 }

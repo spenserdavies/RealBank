@@ -13,9 +13,11 @@ namespace realbank.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly AccountsService _acs;
-        public AccountsController(AccountsService acs)
+        private readonly TransactionsService _ts;
+        public AccountsController(AccountsService acs, TransactionsService ts)
         {
             _acs = acs;
+            _ts = ts;
         }
 
         [HttpGet]
@@ -96,6 +98,28 @@ namespace realbank.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+        
+        [HttpDelete("{id}/transactions")]
+        [Authorize]
+        public ActionResult<string> DeleteTransactions(int id)
+        {
+            try
+            {
+                string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var foundAccount = _acs.GetById(id, userId);
+                if(foundAccount != null)
+                {
+                    var accountNumber = foundAccount.AccountNumber;
+                    return Ok(_ts.DeleteAllTransactions(accountNumber, userId));
+                }
+                return "Account Not Found";
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
         }
     }
 }
