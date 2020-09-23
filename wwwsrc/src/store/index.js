@@ -201,6 +201,14 @@ export default new Vuex.Store({
       } catch (e) {
         console.error(e);
       }
+    },
+    async editTransaction({commit, dispatch}, transaction){
+      try {
+        let res = await api.put("transactions/" + transaction.id, transaction);
+        dispatch("getTransactions");
+      } catch (e) {
+        console.error(e);
+      }
     }
 
   }
