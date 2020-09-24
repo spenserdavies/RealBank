@@ -22,7 +22,7 @@
           Transfer Funds
         </button>
         <hr />
-        <div class="row border-bottom pb-3 pt-2">
+        <div v-if="accounts.length > 0" class="row border-bottom pb-3 pt-2">
           <div class="col-4 text-center">
             <h5>Type</h5>
           </div>
@@ -31,6 +31,14 @@
           </div>
           <div class="col-3 col-md-4 text-center">
             <h5>Bal. ($)</h5>
+          </div>
+        </div>
+        <div v-else class="row pt-4">
+          <div class="col-10 text-center mx-auto">
+            <p>
+              You Currently Do Not Have Any Accounts. <br />
+              Click The 'Open Account' Button To Create One.
+            </p>
           </div>
         </div>
         <div class="pb-5">
