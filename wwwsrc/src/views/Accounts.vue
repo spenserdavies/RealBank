@@ -37,7 +37,7 @@
           <div class="col-10 text-center mx-auto">
             <p>
               You Currently Do Not Have Any Accounts. <br />
-              Click The 'Open Account' Button To Create One.
+              Click The 'New Account' Button To Create One.
             </p>
           </div>
         </div>
