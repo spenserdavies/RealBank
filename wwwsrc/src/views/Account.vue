@@ -444,13 +444,14 @@ export default {
           this.account.balance += this.newTransaction.amount;
         }
         this.$store.dispatch("editBalance", this.account);
-        this.newTransaction.amount = null;
-        this.newTransaction.transactionType = null;
-        this.newTransaction.memo = null;
-        this.newTransaction.category = null;
-        this.newTransaction.date = null;
-        this.newTransaction = this.newTransactionDefault;
-        this.transactionForm = false;
+        setTimeout(() => {
+          this.newTransaction.amount = 0;
+          this.newTransaction.transactionType = null;
+          this.newTransaction.category = null;
+          this.newTransaction.date = null;
+          this.newTransaction.memo = null;
+        }, 3000);
+        this.newTransactionForm = false;
       }
     },
     deleteTransaction(transaction) {
