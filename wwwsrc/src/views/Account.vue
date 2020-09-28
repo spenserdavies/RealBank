@@ -143,10 +143,10 @@
             />
           </div>
           <div class="col-2 border-bottom border-right border-info p-1">
-            <input type="date" v-model="newTransaction.date" class="w-100">
+            <input type="date" v-model="newTransaction.date" class="w-100" />
           </div>
           <div class="col-1 border-bottom border-info">
-            <p> </p>
+            <p></p>
           </div>
           <div class="col-12 bg-white">
             <button
@@ -305,12 +305,10 @@
                 />
               </div>
               <div class="col-2 border-right border-bottom border-info p-1">
-                <input type="date" v-model="transToEdit.date" class="w-100">
+                <input type="date" v-model="transToEdit.date" class="w-100" />
                 <!-- {{ new Date().toISOString().slice(0, 10) }} -->
               </div>
-              <div class="col-1 border-bottom border-info">
-
-              </div>
+              <div class="col-1 border-bottom border-info"></div>
               <div class="col-12 bg-white">
                 <button
                   class="btn btn-dark float-right mx-1 my-1"
@@ -419,7 +417,9 @@ export default {
   computed: {
     transactions() {
       // return this.$store.state.transactions.filter((t) => t.accountNumber == this.account.accountNumber).reverse();
-      return this.$store.state.transactions.filter((t) => t.accountNumber == this.account.accountNumber).sort((a,b) => (a.date < b.date) ? 1 : -1);
+      return this.$store.state.transactions
+        .filter((t) => t.accountNumber == this.account.accountNumber)
+        .sort((a, b) => (a.date < b.date ? 1 : -1));
     },
     accounts() {
       return this.$store.state.accounts.filter((a) => a.id != this.account.id);
@@ -432,7 +432,8 @@ export default {
         x.amount != null &&
         x.transactionType != null &&
         x.memo != null &&
-        x.category != null
+        x.category != null &&
+        x.date != null
       ) {
         this.newTransaction.id = Math.floor(Math.random() * 999999);
         // this.newTransaction.date = new Date().toISOString().slice(0, 10);
@@ -444,6 +445,11 @@ export default {
           this.account.balance += this.newTransaction.amount;
         }
         this.$store.dispatch("editBalance", this.account);
+        this.newTransaction.amount = null;
+        this.newTransaction.transactionType = null;
+        this.newTransaction.memo = null;
+        this.newTransaction.category = null;
+        this.newTransaction.date = null;
         this.newTransaction = this.newTransactionDefault;
         this.transactionForm = false;
       }
