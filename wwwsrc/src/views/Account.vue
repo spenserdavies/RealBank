@@ -404,7 +404,6 @@ export default {
         transactionType: null,
         category: null,
         amount: null,
-        datepicker: null,
       },
       accountTo: {},
       accountFrom: {},
