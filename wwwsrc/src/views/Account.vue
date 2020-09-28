@@ -418,9 +418,8 @@ export default {
   },
   computed: {
     transactions() {
-      return this.$store.state.transactions
-        .filter((t) => t.accountNumber == this.account.accountNumber)
-        .reverse();
+      // return this.$store.state.transactions.filter((t) => t.accountNumber == this.account.accountNumber).reverse();
+      return this.$store.state.transactions.filter((t) => t.accountNumber == this.account.accountNumber).sort((a,b) => (a.date < b.date) ? 1 : -1);
     },
     accounts() {
       return this.$store.state.accounts.filter((a) => a.id != this.account.id);
