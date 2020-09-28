@@ -10,7 +10,7 @@ namespace realbank.Models
         public int AccountNumber { get; set; }
 
         [Required]
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
         [Required]
         public string AccountType { get; set; }
