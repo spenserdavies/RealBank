@@ -142,8 +142,11 @@
               required
             />
           </div>
-          <div class="col border-bottom border-info p-1">
-            {{ new Date().toISOString().slice(0, 10) }}
+          <div class="col-2 border-bottom border-right border-info p-1">
+            <input type="date" v-model="newTransaction.date" class="w-100">
+          </div>
+          <div class="col-1 border-bottom border-info">
+            <p> </p>
           </div>
           <div class="col-12 bg-white">
             <button
@@ -301,8 +304,12 @@
                   required
                 />
               </div>
-              <div class="col border-bottom border-info p-1">
-                {{ new Date().toISOString().slice(0, 10) }}
+              <div class="col-2 border-right border-bottom border-info p-1">
+                <input type="date" v-model="transToEdit.date" class="w-100">
+                <!-- {{ new Date().toISOString().slice(0, 10) }} -->
+              </div>
+              <div class="col-1 border-bottom border-info">
+
               </div>
               <div class="col-12 bg-white">
                 <button
@@ -399,6 +406,7 @@ export default {
         transactionType: null,
         category: null,
         amount: null,
+        datepicker: null,
       },
       accountTo: {},
       accountFrom: {},
@@ -428,7 +436,7 @@ export default {
         x.category != null
       ) {
         this.newTransaction.id = Math.floor(Math.random() * 999999);
-        this.newTransaction.date = new Date().toISOString().slice(0, 10);
+        // this.newTransaction.date = new Date().toISOString().slice(0, 10);
         this.$store.dispatch("newTransaction", this.newTransaction);
         if (this.newTransaction.transactionType == "Withdrawal") {
           this.account.balance -= this.newTransaction.amount;
